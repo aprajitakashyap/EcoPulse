@@ -1,25 +1,33 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Add your Firebase configuration here. In a real app, this should come from env variables.
-// For the Hack2Skill hackathon, you must paste your config here before running.
+// Firebase config loaded from environment variables (frontend/.env)
+// These are public identifiers — security is enforced by Firestore rules + Firebase Auth
 const firebaseConfig = {
-  apiKey: "AIzaSyCfXaXVn_y3DpGwjxnErYlePm4OSr-ZTTQ",
-  authDomain: "ecopulse-cefdf.firebaseapp.com",
-  projectId: "ecopulse-cefdf",
-  storageBucket: "ecopulse-cefdf.firebasestorage.app",
-  messagingSenderId: "595316444760",
-  appId: "1:595316444760:web:13b83a0481091e7a00442d",
-  measurementId: "G-8WB1JGREYP"
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId:     import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+export const auth           = getAuth(app);
+export const db             = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
-export const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
-export const loginWithEmail = (email, password) => signInWithEmailAndPassword(auth, email, password);
-export const registerWithEmail = (email, password) => createUserWithEmailAndPassword(auth, email, password);
-export const logout = () => signOut(auth);
+export const loginWithGoogle    = () => signInWithPopup(auth, googleProvider);
+export const loginWithEmail     = (email, password) => signInWithEmailAndPassword(auth, email, password);
+export const registerWithEmail  = (email, password) => createUserWithEmailAndPassword(auth, email, password);
+export const logout             = () => signOut(auth);
