@@ -45,7 +45,7 @@ function AppRoutes({ user }) {
   return (
     <>
       <AppHeader user={user} />
-      <main className={isAppPage ? 'max-w-4xl mx-auto p-4 sm:p-6 lg:p-8' : ''}>
+      <main id="main-content" className={isAppPage ? 'max-w-4xl mx-auto p-4 sm:p-6 lg:p-8' : ''}>
         <Suspense fallback={<PageSpinner />}>
           <Routes>
             <Route path="/"           element={user ? <Navigate to="/dashboard" /> : <Landing />} />
@@ -90,6 +90,12 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen" style={{ background: '#faf9f6' }}>
+        {/* Skip to main content — keyboard accessibility */}
+        <a href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:rounded-xl focus:font-bold focus:text-white"
+          style={{ background: '#52b788' }}>
+          Skip to main content
+        </a>
         <AppRoutes user={user} />
       </div>
     </Router>

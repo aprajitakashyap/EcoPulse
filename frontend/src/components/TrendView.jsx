@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
@@ -39,21 +39,48 @@ function BreakdownBadge({ entry }) {
 }
 
 function DeleteConfirm({ entry, onConfirm, onCancel }) {
+  const cancelRef = useRef(null);
+
+  // Auto-focus Cancel button when modal opens
+  useEffect(() => {
+    cancelRef.current?.focus();
+  }, []);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onCancel(); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onCancel]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4"
       style={{ background:'rgba(0,0,0,0.35)' }}
+      role="presentation"
       onClick={onCancel}>
-      <div className="rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+      <div role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-desc"
+        className="rounded-2xl p-6 max-w-sm w-full shadow-2xl"
         style={{ background:'#fff' }}
         onClick={e => e.stopPropagation()}>
-        <div className="text-3xl mb-3 text-center">🗑️</div>
-        <h3 className="text-lg font-extrabold text-center mb-1" style={{ color:'#1e3a2f' }}>Delete this entry?</h3>
-        <p className="text-sm text-center mb-1" style={{ color:'#7a9e8c' }}>{formatDate(entry.date)}</p>
-        <p className="text-center font-bold text-lg mb-4" style={{ color:'#c0392b' }}>{entry.co2e} kg CO₂e</p>
+        <div className="text-3xl mb-3 text-center" aria-hidden="true">🗑️</div>
+        <h3 id="delete-dialog-title" className="text-lg font-extrabold text-center mb-1" style={{ color:'#1e3a2f' }}>
+          Delete this entry?
+        </h3>
+        <p id="delete-dialog-desc" className="text-sm text-center mb-1" style={{ color:'#7a9e8c' }}>
+          {formatDate(entry.date)}
+        </p>
+        <p className="text-center font-bold text-lg mb-4" style={{ color:'#c0392b' }}>
+          {entry.co2e} kg CO₂e
+        </p>
         <BreakdownBadge entry={entry} />
-        <p className="text-xs mt-3 text-center" style={{ color:'#aaa' }}>This will be removed from your history and stats.</p>
+        <p className="text-xs mt-3 text-center" style={{ color:'#aaa' }}>
+          This will be removed from your history and stats.
+        </p>
         <div className="flex gap-3 mt-5">
-          <button onClick={onCancel}
+          <button ref={cancelRef} onClick={onCancel}
             className="flex-1 py-2.5 rounded-xl font-semibold transition hover:opacity-80"
             style={{ background:'#f0f0f0', color:'#555' }}>
             Cancel
