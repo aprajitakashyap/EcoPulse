@@ -4,6 +4,16 @@
 
 ---
 
+## Live Deployments
+
+| Service | URL |
+|---------|-----|
+| **Frontend** (Firebase Hosting) | https://ecopulse-cefdf.web.app |
+| **Backend** (Google Cloud Run) | https://ecopulse-backend-205151004236.us-central1.run.app |
+| **Health check** | https://ecopulse-backend-205151004236.us-central1.run.app/health |
+
+---
+
 ## 1. Chosen Vertical
 
 **Sustainability / Climate Action Assistant**
